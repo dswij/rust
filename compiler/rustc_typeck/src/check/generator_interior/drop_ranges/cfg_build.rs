@@ -125,8 +125,10 @@ impl<'a, 'tcx> DropRangeVisitor<'a, 'tcx> {
 
     /// ExprUseVisitor's consume callback doesn't go deep enough for our purposes in all
     /// expressions. This method consumes a little deeper into the expression when needed.
+    // (dswij): not the problem.
     fn consume_expr(&mut self, expr: &hir::Expr<'_>) {
         debug!("consuming expr {:?}, count={:?}", expr.hir_id, self.expr_index);
+        debug!("consumed place {:?}", self.places.consumed);
         let places = self
             .places
             .consumed

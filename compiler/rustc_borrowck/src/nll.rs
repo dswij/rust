@@ -167,6 +167,7 @@ pub(crate) fn compute_regions<'cx, 'tcx>(
     upvars: &[Upvar<'tcx>],
     use_polonius: bool,
 ) -> NllOutput<'tcx> {
+    // dbg!(&move_data);
     let mut all_facts =
         (use_polonius || AllFacts::enabled(infcx.tcx)).then_some(AllFacts::default());
 

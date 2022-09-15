@@ -999,6 +999,7 @@ impl<'cx, 'tcx> MirBorrowckCtxt<'cx, 'tcx> {
     /// short a lifetime. (But sometimes it is more useful to report
     /// it as a more direct conflict between the execution of a
     /// `Drop::drop` with an aliasing borrow.)
+    // (dswij): ok here is the report
     pub(crate) fn report_borrowed_value_does_not_live_long_enough(
         &mut self,
         location: Location,

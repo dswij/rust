@@ -72,12 +72,15 @@ impl<'tcx> ExprUseDelegate<'tcx> {
     }
 
     fn mark_consumed(&mut self, consumer: HirId, target: TrackedValue) {
+        dbg!("mark_consumed with hir_id: {consumer}");
         if !self.places.consumed.contains_key(&consumer) {
             self.places.consumed.insert(consumer, <_>::default());
         }
         self.places.consumed.get_mut(&consumer).map(|places| places.insert(target));
     }
 
+    // (dswij): `Copy` is treated as a borrow. This is not great with async {}. can we do something about
+    // this???
     fn borrow_place(&mut self, place_with_id: &expr_use_visitor::PlaceWithHirId<'tcx>) {
         self.places
             .borrowed
@@ -163,6 +166,7 @@ impl<'tcx> expr_use_visitor::Delegate<'tcx> for ExprUseDelegate<'tcx> {
         self.borrow_place(place_with_id);
     }
 
+    // (dswij): TAKE A LOOK AT THIS
     fn copy(
         &mut self,
         place_with_id: &expr_use_visitor::PlaceWithHirId<'tcx>,
@@ -170,9 +174,9 @@ impl<'tcx> expr_use_visitor::Delegate<'tcx> for ExprUseDelegate<'tcx> {
     ) {
         debug!("copy: place_with_id = {place_with_id:?}");
 
-        self.places
-            .borrowed
-            .insert(TrackedValue::from_place_with_projections_allowed(place_with_id));
+       // self.places
+       //     .borrowed
+       //     .insert(TrackedValue::from_place_with_projections_allowed(place_with_id));
 
         // For copied we treat this mostly like a borrow except that we don't add the place
         // to borrowed_temporaries because the copy is consumed.

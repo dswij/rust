@@ -976,6 +976,10 @@ impl<'cx, 'tcx> MirBorrowckCtxt<'cx, 'tcx> {
         rw: ReadOrWrite,
         flow_state: &Flows<'cx, 'tcx>,
     ) -> bool {
+        dbg!(
+            "check_access_for_conflict(location={:?}, place_span={:?}, sd={:?}, rw={:?})",
+            location, place_span, sd, rw,
+        );
         debug!(
             "check_access_for_conflict(location={:?}, place_span={:?}, sd={:?}, rw={:?})",
             location, place_span, sd, rw,
@@ -1433,6 +1437,7 @@ impl<'cx, 'tcx> MirBorrowckCtxt<'cx, 'tcx> {
         borrow: &BorrowData<'tcx>,
         span: Span,
     ) {
+        dbg!("check_for_invalidation_at_exit({:?})", borrow);
         debug!("check_for_invalidation_at_exit({:?})", borrow);
         let place = borrow.borrowed_place;
         let mut root_place = PlaceRef { local: place.local, projection: &[] };
